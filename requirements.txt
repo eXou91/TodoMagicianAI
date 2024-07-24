@@ -1,0 +1,6 @@
+kubernetes
+langchain_openai
+termcolor
+langgraph
+requests 
+bs4
