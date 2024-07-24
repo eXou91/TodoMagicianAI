@@ -4,7 +4,7 @@
 run-dev: venv/bin/activate
 	@echo "Running the development environment..."
 	. venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
-	. venv/bin/activate && python src/main.py TODO
+	. venv/bin/activate && python src/main.py TODO src/
 
 # Create virtual environment
 venv/bin/activate: requirements.txt

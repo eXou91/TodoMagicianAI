@@ -6,6 +6,7 @@ class AgentGraphState(TypedDict):
     todo_file: str
     normalizer_response: Annotated[List[dict], add_messages]
     tasks_number: int
+    codebase_content: dict
     end_chain: Annotated[List[dict], add_messages]
 
 # Function to get the agent graph state based on a state key
@@ -23,7 +24,8 @@ def get_agent_graph_state(state: AgentGraphState, state_key: str) -> Union[dict,
     state_mapping = {
         "normalizer_all": state["normalizer_response"],
         "normalizer_latest": state["normalizer_response"][-1] if state["normalizer_response"] else None,
-        "tasks_number": state["tasks_number"]
+        "tasks_number": state["tasks_number"],
+        "codebase_content": state["codebase_content"]
     }
     return state_mapping.get(state_key, None)
 
@@ -32,5 +34,6 @@ state: AgentGraphState = {
     "todo_file": "",
     "normalizer_response": [],
     "tasks_number": 0,
+    "codebase_content": {},
     "end_chain": []
 }

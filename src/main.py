@@ -16,9 +16,9 @@ def read_todo_file(file_path):
     with open(file_path, 'r') as file:
         return file.read()
 
-def main(todo_file_path, verbose=False):
+def main(todo_file_path,codebase_path, verbose=False):
     print("Creating graph and compiling workflow...")
-    graph = create_graph(server=server, model=model, model_endpoint=model_endpoint)
+    graph = create_graph(server=server, model=model, model_endpoint=model_endpoint, codebase_path=codebase_path)
     workflow = compile_workflow(graph)
     print("Graph and workflow created.")
 
@@ -36,8 +36,11 @@ def main(todo_file_path, verbose=False):
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print("Usage: python script.py <path_to_todo_file>")
     else:
         todo_file_path = sys.argv[1]
-        main(todo_file_path)
+        codebase_path = sys.argv[2]
+        print("todo_file_path: ", todo_file_path)
+        print("codebase_path: ", codebase_path)
+        main(todo_file_path, codebase_path)

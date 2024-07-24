@@ -13,7 +13,8 @@ from prompts.prompts import (
 
 from states.state import AgentGraphState, get_agent_graph_state, state
 from tools.update_tasks_number import update_tasks_number
-def create_graph(server=None, model=None, stop=None, model_endpoint=None, temperature=0):
+from tools.code_base_retriever import code_base_retriever
+def create_graph(server=None, model=None, stop=None, model_endpoint=None, temperature=0, codebase_path=None):
     """
     Creates and configures the state graph for processing research questions.
 
@@ -52,6 +53,11 @@ def create_graph(server=None, model=None, stop=None, model_endpoint=None, temper
         lambda state: update_tasks_number(state, get_agent_graph_state(state, "normalizer_all"))
     )
 
+    # Add the tool node for reading codebase content
+    graph.add_node(
+        "read_codebase_tool",
+        lambda state: code_base_retriever(codebase_path, state)
+    )
     # Add the EndNodeAgent node
     graph.add_node("end", lambda state: EndNodeAgent(state).invoke())
 
@@ -62,7 +68,8 @@ def create_graph(server=None, model=None, stop=None, model_endpoint=None, temper
 
     ## general branch
     graph.add_edge("normalizer", "update_tasks_number_tool")
-    graph.add_edge("update_tasks_number_tool", "end")
+    graph.add_edge("update_tasks_number_tool", "read_codebase_tool")
+    graph.add_edge("read_codebase_tool", "end")
 
     return graph
     
